@@ -16,23 +16,23 @@ Décomposition de la série temporelle, puis recomposition pour le forecast.
 1. Modèle de décomposition (Buys-Ballot → additif / multiplicatif)
 2. Présence de \(T_t\) et \(S_t\) (Fisher)
 3. Ordre d'extraction par impact de variance → **\(S_t \rightarrow T_t \rightarrow R_t\)**
+4. Extraction de \(S_t\) (coeffs + conservation + désaisonnalisation → \(Y_t^{SA}\))
 
 ### À faire
 
-**A — Extraire \(S_t\)** (plus gros impact)
-- Coefficients saisonniers (moyennes par mois)
-- Principe de conservation : additif → moyenne des coeffs = 0 ; multiplicatif → moyenne = 1
-- Désaisonnaliser \(Y_t\)
-
-**B — Extraire \(T_t\)** sur la série désaisonnalisée
-- Si \(S_t\) présent : pas de régression directe sur \(Y_t\) brut
-- Trend déterministe → régression ; sinon → MA / lissage / lissage expo
+**B — Extraire \(T_t\)** sur \(Y_t^{SA}\) (série déjà désaisonnalisée)
+- Pas de régression sur \(Y_t\) brut (\(S_t\) présent)
+- Trend déterministe → régression OLS ; sinon → MA / lissage / lissage expo
+- Stocker \(T_t\)
 
 **C — Obtenir \(R_t\)**
-- Reste après retrait de \(S_t\) et \(T_t\)
+- Multiplicatif : \(R_t = Y_t^{SA} / T_t\) (ou équivalent selon le modèle)
+- Vérifier / visualiser le résidu
 
 **D — Forecast de chaque composant**
-- \(S_t\) : profil saisonnier ; \(T_t\) : prolonger le modèle ; \(R_t\) : moyenne / MA(p) / lissage expo
+- \(S_t\) : répéter le profil saisonnier \(s_j^*\)
+- \(T_t\) : prolonger la régression ou le lissage
+- \(R_t\) : moyenne naïve / MA(p) / lissage expo
 
 **E — Recomposition**
 - Additif : \(\hat{Y} = \hat{T} + \hat{S} + \hat{R}\)
